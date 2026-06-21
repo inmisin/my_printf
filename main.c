@@ -24,12 +24,31 @@ char _getchar(void)
     return c;
 }
 
-
-
-void ReadValues(const char *const _Format)
+void _putchar(char c)
 {
-    write(1, _Format, 1);
-    write(1, "\n", 1);
+    write(1, &c, 1);
+}
+
+int _putnbr()
+{
+
+}
+
+
+
+void WriteValues(int n, ...)
+{
+    va_list args;
+    va_start(args, n);
+    for (int i = 0; i < n; i++)
+    {
+        int a = va_arg(args, int);
+        char c = a+'0';
+        _putchar(c);
+        _putchar(*"\n");
+    }
+    
+    va_end(args);
 }
 
 int main()
@@ -41,15 +60,8 @@ int main()
     write(1, &ch, 1);
     write(1, "\n", 1);
     */
-    char c;
-    int length = 0;
     
-    while ((c = _getchar()) != '\n')
-    {
-        
-        write(1, &c, length);
-        ReadValues(&c);
-    }
+    WriteValues(2, 1,2);
     
     
     return 0;
