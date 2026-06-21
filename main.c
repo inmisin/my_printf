@@ -29,9 +29,23 @@ void _putchar(char c)
     write(1, &c, 1);
 }
 
-int _putnbr()
+void _putnbr(int n)
 {
-
+    if (n < 0)
+    {
+        _putchar(*"-");
+        n = -n;
+    }
+    if(n >= 10)
+    {
+        _putnbr(n/10);
+        _putnbr(n%10);
+    }
+    else
+    {
+        _putchar(n+'0');
+    } 
+    
 }
 
 
@@ -43,8 +57,7 @@ void WriteValues(int n, ...)
     for (int i = 0; i < n; i++)
     {
         int a = va_arg(args, int);
-        char c = a+'0';
-        _putchar(c);
+        _putnbr(a);
         _putchar(*"\n");
     }
     
@@ -61,7 +74,7 @@ int main()
     write(1, "\n", 1);
     */
     
-    WriteValues(2, 1,2);
+    WriteValues(2, -1,112);
     
     
     return 0;
