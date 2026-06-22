@@ -24,27 +24,23 @@ int ft_printf(const char *format, ...)
         if(*format == '%')
         {
             format++;
-            len++;
             if(*format == 'd')
             {
-                ft_putnbr(va_arg(args,int));
-            }
-            else if(*format == 'c')
+                len += ft_putnbr(va_arg(args,int));
+            }else if(*format == 'c')
             {
-                ft_putchar(va_arg(args, int));
-            }
-            else if(*format == '%')
+                len += ft_putchar(va_arg(args, int));
+            }else if(*format == '%')
             {
-                ft_putchar('%');
-            }
-            else if(*format == 's')
+                len += ft_putchar('%');
+            }else if(*format == 's')
             {
-                ft_putstr(va_arg(args, char *));
+                len += ft_putstr(va_arg(args, char *));
             }
         }
         else
         {
-            ft_putchar(*format);
+            len += ft_putchar(*format);
         }
         format++;
         len++;
