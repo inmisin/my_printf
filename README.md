@@ -1,37 +1,26 @@
-# ⚙️ Custom I/O & Variadic `printf` Implementation
+# ⚙️ ft_printf - Custom Variadic Formatting Engine
 
 <p align="center">
   <img src="https://img.shields.io/badge/Language-C-blue.svg" alt="Language">
   <img src="https://img.shields.io/badge/Level-Low--Level-orange.svg" alt="Level">
 </p>
 
-A lightweight, low-level I/O library written in pure C that bypasses the standard high-level streams (`printf`, `putchar`, `getchar`) to implement a custom formatting engine (`my_printf`). By utilizing hardware-level **System Calls** (`read`/`write`) and **Variadic Arguments** (`<stdarg.h>`), this engine provides platform-agnostic terminal buffer manipulation.
+A minimal, high-performance subsystem implementation of the standard `printf` library function, strictly aligned with 42 Network standards. By bypassing the standard I/O library (`stdio.h`), this project intercepts the kernel boundary directly using raw input/output **System Calls** (`read`/`write`) and handles dynamic execution stacks via **Variadic Arguments** (`<stdarg.h>`).
 
 ---
 
 ## 📌 Table of Contents
+- [Project Architecture](#-project-architecture)
 - [Core Features](#-core-features)
-- [Architectural Deep Dive](#-architectural-deep-dive)
-- [Low-Level Component Breakdown](#-low-level-component-breakdown)
-- [Variadic Parsing Engine](#-variadic-parsing-engine)
-- [Getting Started](#-getting-started)
-- [Performance & Footprint Comparison](#-performance--footprint-comparison)
-- [License](#-license)
+- [File Structure Breakdown](#-file-structure-breakdown)
+- [Variadic Parsing Control Flow](#-variadic-parsing-control-flow)
+- [Compilation & Execution](#-compilation--execution)
 
 ---
 
-## ✨ Core Features
+## 🧠 Project Architecture
 
-* **Direct System Call Trapping:** Interacts directly with Standard Input (`fd: 0`) and Standard Output (`fd: 1`) without stdio layer buffers.
-* **Cross-Platform OS Wrapper:** Dynamically wraps Windows-specific POSIX abstractions (`_write`/`io.h`) and Unix standards (`unistd.h`) via preprocessor macro switches.
-* **Stack-Based Argument Parsing:** Manages runtime variable-length arguments natively on the execution stack frame.
-* **Zero Allocations ($O(1)$ Space):** Formats integers, characters, and string buffers iteratively without allocating dynamic heap memory (`malloc`).
-
----
-
-## 🧠 Architectural Deep Dive
-
-Standard formatting utilities inject heavy abstraction layers into executables. This implementation hooks into the kernel's File Descriptor table directly:
+Unlike standard library formatting engines that rely on user-space buffered streams (`stdout`), `ft_printf` communicates directly with the operating system's internal File Descriptor table. Every character sequence flows downstream to a single unbuffered choke point before trapping into Kernel Space.
 
 ```text
-[my_printf] ──> [Formatting Engines] ──> [_putchar] ──> System Call (write) ──> Kernel (TTY Driver)
+[ft_printf] ──> [Format Dispatcher] ──> [Type Utilities] ──> [ft_putchar] ──> Syscall (write) ──> Kernel
